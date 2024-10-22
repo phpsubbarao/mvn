@@ -14,11 +14,12 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <url>http://maven.apache.org</url>  
   
   <dependencies>  
-   <dependency>
-    <groupId>org.webjars.bower</groupId>
-    <artifactId>angular</artifactId>
-    <version>1.8.3</version>
+<dependency>
+    <groupId>net.exoego</groupId>
+    <artifactId>scala-js-nodejs-v8_sjs0.6_2.13</artifactId>
+    <version>0.9.1</version>
 </dependency>
+
 
 
     
