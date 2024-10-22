@@ -23,9 +23,9 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <!-- https://mvnrepository.com/artifact/org.cloudhoist/node-js -->
 <dependency>
-    <groupId>org.cloudhoist</groupId>
-    <artifactId>node-js</artifactId>
-    <version>0.5.0</version>
+    <groupId>org.webjars.bower</groupId>
+    <artifactId>moment</artifactId>
+    <version>2.29.4</version>
 </dependency>
 
     
