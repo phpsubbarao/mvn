@@ -1,35 +1,59 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"   
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0   
-http://maven.apache.org/xsd/maven-4.0.0.xsd">  
-  
-  <modelVersion>4.0.0</modelVersion>  
-  
-  <groupId>com.javatpoint.application1</groupId>  
-  <artifactId>mav_app</artifactId>  
-  <version>2.0</version>  
-  <packaging>jar</packaging>  
-  
-  <name>Maven Quick Start Archetype</name>  
-  <url>http://maven.apache.org</url>  
-  
-  <dependencies>  
-<dependency>
-    <groupId>net.exoego</groupId>
-    <artifactId>scala-js-nodejs-v8_sjs0.6_2.13</artifactId>
-    <version>0.9.1</version>
-</dependency>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-<!-- https://mvnrepository.com/artifact/com.jetbrains.intellij.php/php -->
-<dependency>
-    <groupId>com.jetbrains.intellij.php</groupId>
-    <artifactId>php</artifactId>
-    <version>243.23654.153</version>
-    <scope>runtime</scope>
-</dependency>
+    <groupId>com.example</groupId>
+    <artifactId>php-mailer-project</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
+    <name>PHP Mailer Project</name>
+    <description>Project using PHPMailer for email functionality</description>
 
-    
-  </dependencies>  
-  
-</project>  
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <phpmailer.version>6.8.0</phpmailer.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.phpmailer</groupId>
+            <artifactId>phpmailer</artifactId>
+            <version>${phpmailer.version}</version>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.5.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
