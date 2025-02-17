@@ -20,6 +20,13 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <version>0.9.1</version>
 </dependency>
 
+<!-- https://mvnrepository.com/artifact/com.jetbrains.intellij.php/php -->
+<dependency>
+    <groupId>com.jetbrains.intellij.php</groupId>
+    <artifactId>php</artifactId>
+    <version>243.23654.153</version>
+    <scope>runtime</scope>
+</dependency>
 
 
     
