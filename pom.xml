@@ -1,58 +1,135 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example</groupId>
-    <artifactId>php-mailer-project</artifactId>
+    <artifactId>angular-downloader</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
-    <name>PHP Mailer Project</name>
-    <description>Project using PHPMailer for email functionality</description>
+    <name>AngularJS Downloader</name>
+    <description>Maven project to download and extract AngularJS</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <phpmailer.version>6.8.0</phpmailer.version>
+        <angularjs.version>1.8.2</angularjs.version>
+        <download.location>${project.build.directory}/downloads</download.location>
+        <extract.location>${project.build.directory}/angular</extract.location>
+        <destination.location>${project.build.directory}/deploy</destination.location>
     </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.github.phpmailer</groupId>
-            <artifactId>phpmailer</artifactId>
-            <version>${phpmailer.version}</version>
-        </dependency>
-    </dependencies>
-
-    <repositories>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
 
     <build>
         <plugins>
+            <!-- Create necessary directories -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.5.0</version>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
-                        <id>copy-dependencies</id>
-                        <phase>package</phase>
+                        <id>create-directories</id>
+                        <phase>initialize</phase>
+                        <configuration>
+                            <target>
+                                <mkdir dir="${download.location}"/>
+                                <mkdir dir="${extract.location}"/>
+                                <mkdir dir="${destination.location}"/>
+                            </target>
+                        </configuration>
                         <goals>
-                            <goal>copy-dependencies</goal>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Download AngularJS -->
+            <plugin>
+                <groupId>com.googlecode.maven-download-plugin</groupId>
+                <artifactId>download-maven-plugin</artifactId>
+                <version>1.7.0</version>
+                <executions>
+                    <execution>
+                        <id>download-angularjs</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>wget</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>false</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <url>https://code.angularjs.org/${angularjs.version}/angular-${angularjs.version}.zip</url>
+                            <outputDirectory>${download.location}</outputDirectory>
+                            <outputFileName>angular-${angularjs.version}.zip</outputFileName>
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <!-- Extract AngularJS -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>extract-angularjs</id>
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <target>
+                                <unzip src="${download.location}/angular-${angularjs.version}.zip"
+                                       dest="${extract.location}"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Copy specific files to destination -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-angularjs-files</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${destination.location}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${extract.location}</directory>
+                                    <includes>
+                                        <include>angular.min.js</include>
+                                        <include>angular-route.min.js</include>
+                                        <!-- Add more specific files as needed -->
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Clean up temporary files -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${download.location}</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${extract.location}</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
             </plugin>
         </plugins>
     </build>
