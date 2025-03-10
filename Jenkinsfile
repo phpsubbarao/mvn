@@ -19,7 +19,7 @@ pipeline {
         
         stage('Build') {
             steps {
-                sh 'mvn clean package -Dproperties.file=build.properties'
+                bat 'mvn clean package -Dproperties.file=build.properties'
             }
         }
     }
