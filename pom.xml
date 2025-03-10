@@ -6,7 +6,7 @@
     <packaging>pom</packaging>
 
     <properties>
-    <buildVersion>${env.AUTOCONF_VERSION}</buildVersion>
+    <buildVersion>${env.firstName}</buildVersion>
 
         
     </properties>
